@@ -125,3 +125,41 @@ for row in results_implicit_join:
     print(row)
 
 session.close()
+
+
+datafilter = {
+    "page": 1,
+    "page_size": 100,
+    "filters":[
+        {
+            "id": "abcdedf",
+            "filters": [
+                {
+                    "id": "abc123",
+                    "name": "abc",
+                    "value": "asd"
+                },
+                {
+                    "id": "abc124",
+                    "name": "abd",
+                    "value": "ase"
+                }
+            ]
+        },
+        {
+            "id": "abcdedg",
+            "filters": [
+                {
+                    "id": "abc125",
+                    "name": "abc",
+                    "value": "asd"
+                },
+                {
+                    "id": "abc126",
+                    "name": "abd",
+                    "value": "ase"
+                }
+            ]
+        }
+    ]
+}
