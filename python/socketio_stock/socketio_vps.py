@@ -1,31 +1,31 @@
 import socketio
 
-# Khởi tạo một đối tượng Socket.IO client
+# Khởi tạo client
 sio = socketio.Client()
 
-# Xử lý sự kiện 'connect'
 @sio.event
 def connect():
-    print('Connection established')
-    # Gửi một sự kiện tới server ngay sau khi kết nối
-    sio.emit('my_event', {'data': 'Hello from Python!'})
+    print("✅ Đã kết nối tới VPS DataFeed")
 
-# Xử lý sự kiện 'disconnect'
+    # Payload bạn muốn gửi
+    payload = [
+        "regs",
+        "{\"action\":\"leave\",\"list\":\"VN30F2509,41I1FA000,VN30F2512,41I1G3000,GB05F2509,GB05F2512,41B5G3000,GB10F2512,GB10F2509,41BAG3000\"}"
+    ]
+
+    # Gửi message tới server
+    sio.send(payload)   # gửi qua channel "message"
+    print("📡 Đã gửi đăng ký:", payload)
+
 @sio.event
 def disconnect():
-    print('Disconnected from server')
+    print("🔌 Mất kết nối")
 
-# Xử lý sự kiện tùy chỉnh từ server
-@sio.event
-def my_response(data):
-    print('Received response:', data)
-    # Tắt kết nối sau khi nhận phản hồi
-    sio.disconnect()
+@sio.on("message")
+def on_message(data):
+    print("📩 Nhận dữ liệu:", data)
 
-# Kết nối tới máy chủ Node.js
-try:
-    sio.connect('wss://bgdatafeed.vps.com.vn/socket.io/?EIO=3&transport=websocket')
-    # Giữ cho client chạy để lắng nghe sự kiện
+if __name__ == "__main__":
+    url = "https://bgdatafeed.vps.com.vn"
+    sio.connect(url, transports=["websocket"])
     sio.wait()
-except Exception as e:
-    print(f"Failed to connect: {e}")
